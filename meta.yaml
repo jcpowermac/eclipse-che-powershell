@@ -1,0 +1,19 @@
+apiVersion: v2
+publisher: ms-vscode
+name: powershell
+version: latest
+type: VS Code extension
+displayName: PowerShell
+title: PowerShell
+description: Develop PowerShell scripts in Visual Studio Code!
+icon: /v3/images/ms-vscode-powershell-icon.png
+category: Debuggers
+repository: 'https://github.com/PowerShell/vscode-powershell.git'
+firstPublicationDate: '2021-02-25'
+latestUpdateDate: '2021-04-23'
+spec:
+  containers:
+    - image: 'quay.io/jcallen/che-plugin-sidecar:powershell'
+      name: vscode-powershell
+  extensions:
+    - 'https://github.com/PowerShell/vscode-powershell/releases/download/v2021.2.2/PowerShell-2021.2.2.vsix'
