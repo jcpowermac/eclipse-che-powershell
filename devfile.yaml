@@ -2,16 +2,6 @@ apiVersion: 1.0.0
 metadata:
   name: powershell-
 components:
-  - mountSources: true
-    command:
-      - tail
-    args:
-      - '-f'
-      - /dev/null
-    memoryLimit: 64Mi
-    type: dockerimage
-    image: 'quay.io/jcallen/che-plugin-sidecar:powershell'
-    alias: dev
   - type: chePlugin
     reference: 'https://raw.githubusercontent.com/jcpowermac/eclipse-che-powershell/main/meta.yaml'
   - id: eclipse/che-theia/latest
