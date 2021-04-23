@@ -7,7 +7,7 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           \$ErrorActionPreference = 'Stop' ; \
           \$ProgressPreference = 'SilentlyContinue' ; \
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted ; \
-          Install-Module VMware.PowerCLI ;"
+          Install-Module -Scope AllUsers VMware.PowerCLI ;"
 ENV HOME=/home/theia
 
 RUN mkdir /projects ${HOME} && \
