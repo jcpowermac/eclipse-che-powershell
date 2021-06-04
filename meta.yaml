@@ -15,7 +15,7 @@ spec:
   containers:
     - image: 'quay.io/jcallen/che-plugin-sidecar:powershell'
       name: vscode-powershell
-      memoryLimit: 2048M
+      memoryLimit: 4096M
       cpuLimit: 1500m
   extensions:
     - 'https://github.com/PowerShell/vscode-powershell/releases/download/v2020.9.0-preview/PowerShell-Preview-2020.9.0.vsix'
