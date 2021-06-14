@@ -1,13 +1,17 @@
 FROM mcr.microsoft.com/powershell:lts-centos-8
 
-RUN dnf upgrade --refresh -y
+RUN dnf upgrade --refresh -y && \
+    dnf install git curl wget grep sed -y
 
 RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
 	pwsh -NoLogo -NoProfile -Command " \
           \$ErrorActionPreference = 'Stop' ; \
           \$ProgressPreference = 'SilentlyContinue' ; \
           Set-PSRepository -Name PSGallery -InstallationPolicy Trusted ; \
-          Install-Module -Scope AllUsers VMware.PowerCLI ;"
+          Install-Module -Scope AllUsers VMware.PowerCLI ; \
+          Install-Module -Name PSReadLine -AllowPrerelease -Scope AllUsers -Force -SkipPublisherCheck ; \
+          Install-Module -Scope AllUsers posh-git ; \
+          Install-Module -Scope AllUsers oh-my-posh ;"
 ENV HOME=/home/theia
 
 RUN mkdir /projects ${HOME} && \
