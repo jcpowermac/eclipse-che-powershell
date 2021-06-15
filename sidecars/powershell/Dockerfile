@@ -3,6 +3,21 @@ FROM mcr.microsoft.com/powershell:lts-centos-8
 RUN dnf upgrade --refresh -y && \
     dnf install git curl wget grep sed -y
 
+ENV HOME=/home/theia
+ENV PATH=${PATH}:/home/theia/psu
+
+RUN mkdir /projects ${HOME} && \
+    # Change permissions to let any arbitrary user
+    for f in "${HOME}" "/etc/passwd" "/projects"; do \
+      echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
+      chmod -R g+rwX ${f}; \
+    done
+
+RUN mkdir ${HOME}/.dotnet && \
+    mkdir ${HOME}/psu && \
+    chmod -R 777 ${HOME}/.dotnet && \
+    chmod -R 777 ${HOME}
+
 RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
 	pwsh -NoLogo -NoProfile -Command " \
           \$ErrorActionPreference = 'Stop' ; \
@@ -13,19 +28,7 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           Install-Module -Scope AllUsers posh-git ; \
           Install-Module -Scope AllUsers oh-my-posh ; \
           Install-Module -Scope AllUsers UniversalDashboard ; \
-          Install-PSUServer -LatestVersion"
-
-ENV HOME=/home/theia
-
-RUN mkdir /projects ${HOME} && \
-    # Change permissions to let any arbitrary user
-    for f in "${HOME}" "/etc/passwd" "/projects"; do \
-      echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
-      chmod -R g+rwX ${f}; \
-    done
-
-RUN mkdir ${HOME}/.dotnet && chmod -R 777 ${HOME}/.dotnet \
-    && chmod -R 777 ${HOME}
+          Install-PSUServer -LatestVersion -Path ${HOME}/psu"
 
 WORKDIR /projects
 
@@ -33,5 +36,4 @@ ADD etc/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD ${PLUGIN_REMOTE_ENDPOINT_EXECUTABLE}
-
 
