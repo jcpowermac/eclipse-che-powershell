@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell:lts-centos-8
+FROM mcr.microsoft.com/powershell:centos-8
 
 RUN dnf upgrade --refresh -y && \
     dnf install git curl wget grep sed -y
