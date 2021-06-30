@@ -4,19 +4,7 @@ RUN dnf upgrade --refresh -y && \
     dnf install git curl wget grep sed -y
 
 ENV HOME=/home/theia
-ENV PATH=${PATH}:/home/theia/psu
-
-RUN mkdir /projects ${HOME} && \
-    # Change permissions to let any arbitrary user
-    for f in "${HOME}" "/etc/passwd" "/projects"; do \
-      echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
-      chmod -R g+rwX ${f}; \
-    done
-
-RUN mkdir ${HOME}/.dotnet && \
-    mkdir ${HOME}/psu && \
-    chmod -R 777 ${HOME}/.dotnet && \
-    chmod -R 777 ${HOME}
+#ENV PATH=${PATH}:/home/theia/psu
 
 RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
 	pwsh -NoLogo -NoProfile -Command " \
@@ -26,9 +14,14 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           Install-Module -Scope AllUsers VMware.PowerCLI ; \
           Install-Module -Name PSReadLine -AllowPrerelease -Scope AllUsers -Force -SkipPublisherCheck ; \
           Install-Module -Scope AllUsers posh-git ; \
-          Install-Module -Scope AllUsers oh-my-posh ; \
-          Install-Module -Scope AllUsers UniversalDashboard ; \
-          Install-PSUServer -LatestVersion -Path ${HOME}/psu"
+          Install-Module -Scope AllUsers oh-my-posh"
+
+RUN mkdir /projects && \
+    # Change permissions to let any arbitrary user
+    for f in "${HOME}" "/etc/passwd" "/projects"; do \
+      echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
+      chmod -R g+rwX ${f}; \
+    done
 
 WORKDIR /projects
 
