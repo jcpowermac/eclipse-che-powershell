@@ -14,7 +14,8 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           Install-Module -Scope AllUsers VMware.PowerCLI ; \
           Install-Module -Name PSReadLine -AllowPrerelease -Scope AllUsers -Force -SkipPublisherCheck ; \
           Install-Module -Scope AllUsers posh-git ; \
-          Install-Module -Scope AllUsers oh-my-posh"
+          Install-Module -Scope AllUsers oh-my-posh ; \
+          Set-PowerCLIConfiguration -Scope AllUsers -ParticipateInCeip:\$false -Confirm:\$false"
 
 RUN mkdir /projects && \
     # Change permissions to let any arbitrary user
