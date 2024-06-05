@@ -5,3 +5,4 @@ components:
   - name: dev-tooling
     container:
       image: quay.io/jcallen/udi-pwsh:latest
+      memoryLimit: 16384M
