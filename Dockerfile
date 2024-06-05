@@ -20,4 +20,5 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           Install-Module -Scope AllUsers oh-my-posh ; \
           Set-PowerCLIConfiguration -Scope AllUsers -ParticipateInCeip:\$false -Confirm:\$false"
 
+RUN chgrp -R 0 /home && chmod -R g=u /home
 USER 10001
