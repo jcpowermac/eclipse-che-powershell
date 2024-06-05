@@ -1,10 +1,13 @@
-FROM mcr.microsoft.com/powershell:centos-8
+FROM quay.io/devfile/universal-developer-image:ubi8-latest
 
-RUN dnf upgrade --refresh -y && \
-    dnf install git curl wget grep sed -y
+USER 0
 
-ENV HOME=/home/theia
-#ENV PATH=${PATH}:/home/theia/psu
+# Register the Microsoft RedHat repository
+RUN cd /tmp && \
+    curl -sSL -O https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm && \
+    rpm -i packages-microsoft-prod.rpm && \
+    rm packages-microsoft-prod.rpm && \
+    dnf install -y powershell
 
 RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
 	pwsh -NoLogo -NoProfile -Command " \
@@ -17,17 +20,4 @@ RUN export POWERSHELL_TELEMETRY_OPTOUT=1 && \
           Install-Module -Scope AllUsers oh-my-posh ; \
           Set-PowerCLIConfiguration -Scope AllUsers -ParticipateInCeip:\$false -Confirm:\$false"
 
-RUN mkdir /projects && \
-    # Change permissions to let any arbitrary user
-    for f in "${HOME}" "/etc/passwd" "/projects"; do \
-      echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
-      chmod -R g+rwX ${f}; \
-    done
-
-WORKDIR /projects
-
-ADD etc/entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh" ]
-CMD ${PLUGIN_REMOTE_ENDPOINT_EXECUTABLE}
-
+USER 10001

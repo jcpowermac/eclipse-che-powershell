@@ -1,0 +1,7 @@
+schemaVersion: 2.1.0
+metadata:
+  name: helloworld-example
+components:
+  - name: dev-tooling
+    container:
+      image: quay.io/jcallen/udi-pwsh:ubi8-latest
